@@ -427,12 +427,12 @@
           <input class="f-in" id="uCnic" type="tel" placeholder="XXXXX-XXXXXXX-X" maxlength="15" required>
           <div class="f-error" id="cnicError">⚠️ درست CNIC نمبر درج کریں (مثال: 35201-1234567-1)</div>
 
-          <label class="f-lbl">📱 موبائل نمبر</label>
+          <!-- <label class="f-lbl">📱 موبائل نمبر</label>
           <input class="f-in" id="uPhone" type="tel" placeholder="03XX-XXXXXXX" maxlength="12" required>
-          <div class="f-error" id="phoneError">⚠️ درست موبائل نمبر درج کریں (مثال: 0300-1234567)</div>
-
-          <label class="f-lbl">🏫 یونیورسٹی کا نام</label>
-          <input class="f-in" id="uUniversity" type="text" placeholder="اپنی یونیورسٹی کا نام درج کریں" required>
+          <div class="f-error" id="phoneError">⚠️ درست موبائل نمبر درج کریں (مثال: 0300-1234567)</div> -->
+          
+<!--  <label class="f-lbl">🏫 یونیورسٹی کا نام</label>
+          <input class="f-in" id="uUniversity" type="text" placeholder="اپنی یونیورسٹی کا نام درج کریں" required> -->
 
           <label class="f-lbl">📚 ڈگری / سمسٹر</label>
           <select class="f-in" id="uDegree" required>
@@ -483,7 +483,42 @@
 </div>
 
 <!-- ══ FIRST VISIT CONFIRM SCREEN ══ -->
-<div id="confirmScreen">
+  <div id="alreadyScreen">
+  <div class="pw">
+    <div style="text-align:center;padding:28px 0 18px;">
+      <div style="font-size:3.2rem;margin-bottom:10px;">✅</div>
+      <h2 class="ur" style="font-size:1.2rem;color:var(--g1);margin-bottom:6px;">آپ کی درخواست زیر غور ہے!</h2>
+      <p class="ur" style="font-size:.82rem;color:var(--sub);">منظوری کے لیے ابھی شیئر کریں</p>
+    </div>
+    <div class="form-card">
+      <div style="padding:20px;text-align:center;">
+        <div class="stamp" style="animation:stampIt .4s .1s cubic-bezier(.34,1.56,.64,1) forwards;">PENDING</div>
+        <div class="confirm-msg" style="margin-top:14px;">
+          <p class="ur" style="font-size:.88rem;color:var(--sub);margin:0;">آپ کی درخواست موصول ہو چکی ہے۔ منظوری کے لیے نیچے دیے گئے بٹن سے لنک شیئر کریں۔</p>
+        </div>
+
+        <div class="share-prog-wrap">
+          <div class="share-prog-info">
+            <span class="ur">شیئرنگ پیشرفت</span>
+            <span id="shareCount">0 / 15</span>
+          </div>
+          <div class="share-prog-track">
+            <div class="share-prog-fill" id="shareBar"></div>
+          </div>
+        </div>
+
+        <div class="share-box" style="margin-top:14px;">
+          <p class="ur" style="font-size:.85rem;color:#92400e;font-weight:700;margin-bottom:5px;">📲 ابھی شیئر کریں!</p>
+          <p class="ur" style="font-size:.78rem;color:#92400e;margin:0;"><strong>15 واٹس ایپ کانٹیکٹس</strong> یا <strong>5 گروپس</strong> میں شیئر کریں</p>
+        </div>
+
+        <button class="wa-btn ur" onclick="realShare('contacts')">📲 واٹس ایپ کانٹیکٹس کو شیئر کریں</button>
+        <button class="wa-btn teal ur" onclick="realShare('groups')">👥 گروپس میں شیئر کریں</button>
+        <p style="font-size:.63rem;color:var(--muted);margin-top:10px;">شیئر کرنے کے بعد 24 گھنٹے میں رقم آ جائے گی</p>
+      </div>
+    </div>
+
+<!-- <div id="confirmScreen">
   <div class="pw">
     <div class="form-card">
       <div style="padding:26px 20px;text-align:center;">
@@ -514,7 +549,7 @@
   <div class="sec" style="margin-top:16px;">🎯 آپ کے لیے خصوصی آفرز</div>
   <div class="ads-grid" id="adsGrid"></div>
   <div id="adsBanner"></div>
-</div>
+</div> -->
 
 <!-- ══ SECOND VISIT SCREEN — WhatsApp now works ══ -->
 <div id="alreadyScreen">
@@ -931,6 +966,7 @@ function launchConfetti(){
 </script>
 </body>
 </html>
+
 
 
 
